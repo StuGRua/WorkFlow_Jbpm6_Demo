@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace="http://www.jboss.org/drools"
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <itemDefinition id="null" structureRef="Integer" />
+
+  <process processType="Private" isExecutable="true" id="com.sample.bpmn.bankLoanWorkFlow" name="Hello World" >
+
+    <!-- process variables -->
+    <property id="credit" itemSubjectRef="null"/>
+    <property id="state" itemSubjectRef="null"/>
+    <property id="loanPurpose" itemSubjectRef="null"/>
+    <property id="creditResult" itemSubjectRef="null"/>
+    <property id="loanPurposeResult" itemSubjectRef="null"/>
+    <property id="prepare" itemSubjectRef="null"/>
+    <property id="OK" itemSubjectRef="null"/>
+
+    <!-- nodes -->
+    <startEvent id="_1"  isInterrupting="true"/>
+    <scriptTask id="_jbpm-unique-2" name="Accept  a case." >
+      <script>System.out.println("------------------------e-mail----------------------------------------");
+System.out.println("To e-mail "+kcontext.getProcessInstance.getVariable("e-mail")+":Hello~Dear "+kcontext.getProcessInstance.getVariable("name")+"  Your loan is under review!");
+System.out.println("------------------------e-mail----------------------------------------");
+//System.out.println(kcontext.getProcessInstance.getVariable("state"));
+kcontext.getProcessInstance.setVariable("state",1);
+//System.out.println(kcontext.getProcessInstance.getVariable("state"));
+//System.out.println(kcontext.getProcessInstance.getVariable("loanPurpose"));
+//模拟给用户发邮件</script>
+    </scriptTask>
+    <endEvent id="_jbpm-unique-7" name="End" >
+        <terminateEventDefinition />
+    </endEvent>
+    <userTask id="_jbpm-unique-5" name="Customer credit audit" >
+      <extensionElements>
+        <tns:onEntry-script>
+          <tns:script>System.out.println(kcontext.getProcessInstance.getVariable("name")+" Credit is being reviewed");</tns:script>
+        </tns:onEntry-script>
+        <tns:onEntry-script>
+          <tns:script>//System.out.println(kcontext.getProcessInstance.getVariable("credit")+"begin");</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script>
+          <tns:script>System.out.println(kcontext.getProcessInstance.getVariable("name")+" Credit audit completed");</tns:script>
+        </tns:onExit-script>
+        <tns:onExit-script>
+          <tns:script>//System.out.println(kcontext.getProcessInstance.getVariable("credit")+" Credit audit completed");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-5_creditResultInput" name="creditResult" />
+        <dataInput id="_jbpm-unique-5_CommentInput" name="Comment" />
+        <dataInput id="_jbpm-unique-5_TaskNameInput" name="TaskName" />
+        <dataInput id="_jbpm-unique-5_NodeNameInput" name="NodeName" />
+        <dataInput id="_jbpm-unique-5_SkippableInput" name="Skippable" />
+        <dataOutput id="_jbpm-unique-5_creditResultOutput" name="creditResult" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-5_creditResultInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-5_CommentInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-5_TaskNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-5_NodeNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-5_SkippableInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-5_creditResultOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>creditResult</sourceRef>
+        <targetRef>_jbpm-unique-5_creditResultInput</targetRef>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-5_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">You need audit the user's credit.</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-5_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-5_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Customer credit audit</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-5_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-5_NodeNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Customer credit audit</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-5_NodeNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-5_SkippableInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">false</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-5_SkippableInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-5_creditResultOutput</sourceRef>
+        <targetRef>creditResult</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>mary</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <parallelGateway id="_jbpm-unique-3" name="Gateway" gatewayDirection="Diverging" />
+    <userTask id="_jbpm-unique-35" name="Request the rectification" >
+      <extensionElements>
+        <tns:onEntry-script>
+          <tns:script>System.out.println(kcontext.getProcessInstance.getVariable("name")+" Project start modification");</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script>
+          <tns:script>System.out.println(kcontext.getProcessInstance.getVariable("name")+" Project modification completed");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-35_CommentInput" name="Comment" />
+        <dataInput id="_jbpm-unique-35_TaskNameInput" name="TaskName" />
+        <dataInput id="_jbpm-unique-35_NodeNameInput" name="NodeName" />
+        <dataInput id="_jbpm-unique-35_SkippableInput" name="Skippable" />
+        <dataOutput id="_jbpm-unique-35_prepareOutput" name="prepare" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-35_CommentInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-35_TaskNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-35_NodeNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-35_SkippableInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-35_prepareOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-35_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">You need to modify the plan.</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-35_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-35_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Request the rectification</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-35_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-35_NodeNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Request the rectification</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-35_NodeNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-35_SkippableInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">false</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-35_SkippableInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-35_prepareOutput</sourceRef>
+        <targetRef>prepare</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>krisv</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <exclusiveGateway id="_jbpm-unique-32" name="prepared?" gatewayDirection="Diverging" />
+    <scriptTask id="_jbpm-unique-39" name="Prepare the loan money" >
+      <script>//kcontext.getProcessInstance().signalEvent("abc",1);
+System.out.println("Loan funds "+kcontext.getProcessInstance.getVariable("loanMoney")+"$ prepared");
+System.out.println("------------------------e-mail----------------------------------------");
+System.out.println("To e-mail "+kcontext.getProcessInstance.getVariable("e-mail")+":Hello~Dear "+kcontext.getProcessInstance.getVariable("name")+"  Your loan"+kcontext.getProcessInstance.getVariable("loanMoney")+"$ has prepared.Please confirm whether to accept the loan");
+System.out.println("------------------------e-mail----------------------------------------");</script>
+    </scriptTask>
+    <exclusiveGateway id="_jbpm-unique-31" name="loop" gatewayDirection="Converging" />
+    <userTask id="_jbpm-unique-6" name="Loan purpose audit" >
+      <extensionElements>
+        <tns:onEntry-script>
+          <tns:script>System.out.println(kcontext.getProcessInstance.getVariable("name")+" Loan purpose is being reviewed");</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script>
+          <tns:script>System.out.println(kcontext.getProcessInstance.getVariable("name")+" Loan purpose audit completed");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-6_loanPurposeResultInput" name="loanPurposeResult" />
+        <dataInput id="_jbpm-unique-6_CommentInput" name="Comment" />
+        <dataInput id="_jbpm-unique-6_TaskNameInput" name="TaskName" />
+        <dataInput id="_jbpm-unique-6_NodeNameInput" name="NodeName" />
+        <dataInput id="_jbpm-unique-6_SkippableInput" name="Skippable" />
+        <dataOutput id="_jbpm-unique-6_loanPurposeResultOutput" name="loanPurposeResult" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-6_loanPurposeResultInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-6_CommentInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-6_TaskNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-6_NodeNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-6_SkippableInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-6_loanPurposeResultOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>loanPurposeResult</sourceRef>
+        <targetRef>_jbpm-unique-6_loanPurposeResultInput</targetRef>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-6_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">You need audit the user's loan purpose.</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-6_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-6_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Loan purpose audit</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-6_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-6_NodeNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Loan purpose audit</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-6_NodeNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-6_SkippableInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">false</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-6_SkippableInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-6_loanPurposeResultOutput</sourceRef>
+        <targetRef>loanPurposeResult</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>john</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <scriptTask id="_jbpm-unique-19" name="Pass" >
+      <script>System.out.println("pass");
+System.out.println("------------------------e-mail----------------------------------------");
+System.out.println("To e-mail "+kcontext.getProcessInstance.getVariable("e-mail")+":Hello~Dear "+kcontext.getProcessInstance.getVariable("name")+"  Your loan is passed ! Please wait for the loan to be issued!");
+System.out.println("------------------------e-mail----------------------------------------");</script>
+    </scriptTask>
+    <exclusiveGateway id="_jbpm-unique-15" name="passed?" gatewayDirection="Diverging" />
+    <scriptTask id="_jbpm-unique-18" name="Refuse" >
+      <script>System.out.println("refuse");
+System.out.println("------------------------e-mail----------------------------------------");
+System.out.println("To e-mail "+kcontext.getProcessInstance.getVariable("e-mail")+":Hello~Dear "+kcontext.getProcessInstance.getVariable("name")+"  Your loan is refused!I'm so sorry!");
+System.out.println("------------------------e-mail----------------------------------------");
+kcontext.getProcessInstance.setVariable("state",3);
+</script>
+    </scriptTask>
+    <parallelGateway id="_jbpm-unique-4" name="Gateway" gatewayDirection="Converging" />
+    <intermediateCatchEvent id="_jbpm-unique-22" name="Signal" >
+      <dataOutput id="_jbpm-unique-22_Output" name="event" />
+      <dataOutputAssociation>
+      <sourceRef>_jbpm-unique-22_Output</sourceRef>
+      <targetRef>OK</targetRef>
+      </dataOutputAssociation>
+      <outputSet>
+        <dataOutputRefs>_jbpm-unique-22_Output</dataOutputRefs>
+      </outputSet>
+      <signalEventDefinition signalRef="Confirmation"/>
+    </intermediateCatchEvent>
+    <scriptTask id="_jbpm-unique-21" name="Cancel" >
+      <script>System.out.println("------------------------e-mail----------------------------------------");
+System.out.println("To e-mail "+kcontext.getProcessInstance.getVariable("e-mail")+":Hello~Dear "+kcontext.getProcessInstance.getVariable("name")+"  The confirmation time has expired and the loan has been cancelled for you");
+System.out.println("------------------------e-mail----------------------------------------");
+kcontext.getProcessInstance.setVariable("state",4);</script>
+    </scriptTask>
+    <exclusiveGateway id="_jbpm-unique-25" name="Choose" gatewayDirection="Diverging" />
+    <exclusiveGateway id="_jbpm-unique-27" name="ChooseEnd" gatewayDirection="Converging" />
+    <parallelGateway id="_jbpm-unique-43" name="Gateway2" gatewayDirection="Diverging" />
+    <parallelGateway id="_jbpm-unique-44" name="Gateway2" gatewayDirection="Converging" />
+    <scriptTask id="_jbpm-unique-42" name="Timeout" >
+      <script>//ksession.signalEvent("Confirmation",0,kcontext.getProcessInstance().getId());
+//System.out.println("OK n "+OK);
+kcontext.getProcessInstance().signalEvent("Confirmation",0);</script>
+    </scriptTask>
+    <intermediateCatchEvent id="_jbpm-unique-46" name="Timer" >
+      <timerEventDefinition>
+        <timeDuration xsi:type="tFormalExpression">2s</timeDuration>
+      </timerEventDefinition>
+    </intermediateCatchEvent>
+    <exclusiveGateway id="_jbpm-unique-48" name="Gateway3" gatewayDirection="Converging" />
+    <userTask id="_jbpm-unique-49" name="Make loans" >
+      <extensionElements>
+        <tns:onEntry-script>
+          <tns:script>System.out.println(kcontext.getProcessInstance.getVariable("name")+" Worker starts to make loans");</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script>
+          <tns:script>System.out.println(kcontext.getProcessInstance.getVariable("name")+"Making loans completed!");
+System.out.println("------------------------e-mail----------------------------------------");
+System.out.println("To e-mail "+kcontext.getProcessInstance.getVariable("e-mail")+":Hello~Dear "+kcontext.getProcessInstance.getVariable("name")+" Your loan has been issue");
+System.out.println("------------------------e-mail----------------------------------------");</tns:script>
+        </tns:onExit-script>
+        <tns:onExit-script>
+          <tns:script></tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-49_stateInput" name="state" />
+        <dataInput id="_jbpm-unique-49_CommentInput" name="Comment" />
+        <dataInput id="_jbpm-unique-49_TaskNameInput" name="TaskName" />
+        <dataInput id="_jbpm-unique-49_NodeNameInput" name="NodeName" />
+        <dataInput id="_jbpm-unique-49_SkippableInput" name="Skippable" />
+        <dataOutput id="_jbpm-unique-49_stateOutput" name="state" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-49_stateInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-49_CommentInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-49_TaskNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-49_NodeNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-49_SkippableInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-49_stateOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>state</sourceRef>
+        <targetRef>_jbpm-unique-49_stateInput</targetRef>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-49_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">You need to make loans to the user.</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-49_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-49_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Make loans</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-49_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-49_NodeNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Make loans</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-49_NodeNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-49_SkippableInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">false</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-49_SkippableInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-49_stateOutput</sourceRef>
+        <targetRef>state</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>mary</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+
+    <!-- connections -->
+    <sequenceFlow id="_1-_jbpm-unique-2" sourceRef="_1" targetRef="_jbpm-unique-2" />
+    <sequenceFlow id="_jbpm-unique-48-_jbpm-unique-7" sourceRef="_jbpm-unique-48" targetRef="_jbpm-unique-7" />
+    <sequenceFlow id="_jbpm-unique-3-_jbpm-unique-5" sourceRef="_jbpm-unique-3" targetRef="_jbpm-unique-5" />
+    <sequenceFlow id="_jbpm-unique-2-_jbpm-unique-3" sourceRef="_jbpm-unique-2" targetRef="_jbpm-unique-3" />
+    <sequenceFlow id="_jbpm-unique-31-_jbpm-unique-35" sourceRef="_jbpm-unique-31" targetRef="_jbpm-unique-35" />
+    <sequenceFlow id="_jbpm-unique-35-_jbpm-unique-32" sourceRef="_jbpm-unique-35" targetRef="_jbpm-unique-32" />
+    <sequenceFlow id="_jbpm-unique-32-_jbpm-unique-39" sourceRef="_jbpm-unique-32" targetRef="_jbpm-unique-39" name="yes" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >if((Integer)prepare==1)
+{
+return true;
+}
+else
+{
+return false;
+}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-32-_jbpm-unique-31" sourceRef="_jbpm-unique-32" targetRef="_jbpm-unique-31" name="no" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >if((Integer)prepare==1)
+{
+return false;
+}
+else
+{
+return true;
+}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-19-_jbpm-unique-31" sourceRef="_jbpm-unique-19" targetRef="_jbpm-unique-31" />
+    <sequenceFlow id="_jbpm-unique-3-_jbpm-unique-6" sourceRef="_jbpm-unique-3" targetRef="_jbpm-unique-6" />
+    <sequenceFlow id="_jbpm-unique-15-_jbpm-unique-19" sourceRef="_jbpm-unique-15" targetRef="_jbpm-unique-19" name="pass" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >if ((Integer)creditResult==1 &amp;&amp;(Integer)loanPurposeResult==1)
+{
+return true;
+}
+else
+{
+return false;
+}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-4-_jbpm-unique-15" sourceRef="_jbpm-unique-4" targetRef="_jbpm-unique-15" />
+    <sequenceFlow id="_jbpm-unique-15-_jbpm-unique-18" sourceRef="_jbpm-unique-15" targetRef="_jbpm-unique-18" name="refuse" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >if (creditResult==1 &amp;&amp; loanPurposeResult==1)
+{
+return false;
+}
+else
+{
+return true;
+}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-5-_jbpm-unique-4" sourceRef="_jbpm-unique-5" targetRef="_jbpm-unique-4" />
+    <sequenceFlow id="_jbpm-unique-6-_jbpm-unique-4" sourceRef="_jbpm-unique-6" targetRef="_jbpm-unique-4" />
+    <sequenceFlow id="_jbpm-unique-43-_jbpm-unique-22" sourceRef="_jbpm-unique-43" targetRef="_jbpm-unique-22" />
+    <sequenceFlow id="_jbpm-unique-25-_jbpm-unique-21" sourceRef="_jbpm-unique-25" targetRef="_jbpm-unique-21" name="cancel" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return (Integer)OK!=1;</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-44-_jbpm-unique-25" sourceRef="_jbpm-unique-44" targetRef="_jbpm-unique-25" />
+    <sequenceFlow id="_jbpm-unique-21-_jbpm-unique-27" sourceRef="_jbpm-unique-21" targetRef="_jbpm-unique-27" />
+    <sequenceFlow id="_jbpm-unique-49-_jbpm-unique-27" sourceRef="_jbpm-unique-49" targetRef="_jbpm-unique-27" />
+    <sequenceFlow id="_jbpm-unique-39-_jbpm-unique-43" sourceRef="_jbpm-unique-39" targetRef="_jbpm-unique-43" />
+    <sequenceFlow id="_jbpm-unique-22-_jbpm-unique-44" sourceRef="_jbpm-unique-22" targetRef="_jbpm-unique-44" />
+    <sequenceFlow id="_jbpm-unique-42-_jbpm-unique-44" sourceRef="_jbpm-unique-42" targetRef="_jbpm-unique-44" />
+    <sequenceFlow id="_jbpm-unique-46-_jbpm-unique-42" sourceRef="_jbpm-unique-46" targetRef="_jbpm-unique-42" />
+    <sequenceFlow id="_jbpm-unique-43-_jbpm-unique-46" sourceRef="_jbpm-unique-43" targetRef="_jbpm-unique-46" />
+    <sequenceFlow id="_jbpm-unique-27-_jbpm-unique-48" sourceRef="_jbpm-unique-27" targetRef="_jbpm-unique-48" />
+    <sequenceFlow id="_jbpm-unique-18-_jbpm-unique-48" sourceRef="_jbpm-unique-18" targetRef="_jbpm-unique-48" />
+    <sequenceFlow id="_jbpm-unique-25-_jbpm-unique-49" sourceRef="_jbpm-unique-25" targetRef="_jbpm-unique-49" name="make loans" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return (Integer)OK==1;</conditionExpression>
+    </sequenceFlow>
+
+  </process>
+
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="com.sample.bpmn.bankLoanWorkFlow" >
+      <bpmndi:BPMNShape bpmnElement="_1" >
+        <dc:Bounds x="15" y="47" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-2" >
+        <dc:Bounds x="121" y="46" width="139" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-7" >
+        <dc:Bounds x="1178" y="311" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-5" >
+        <dc:Bounds x="389" y="11" width="182" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-3" >
+        <dc:Bounds x="298" y="50" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-35" >
+        <dc:Bounds x="134" y="162" width="175" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-32" >
+        <dc:Bounds x="117" y="288" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-39" >
+        <dc:Bounds x="39" y="417" width="199" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-31" >
+        <dc:Bounds x="309" y="281" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-6" >
+        <dc:Bounds x="385" y="85" width="184" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-19" >
+        <dc:Bounds x="649" y="238" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-15" >
+        <dc:Bounds x="778" y="54" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-18" >
+        <dc:Bounds x="925" y="55" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-4" >
+        <dc:Bounds x="602" y="52" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-22" >
+        <dc:Bounds x="348" y="474" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-21" >
+        <dc:Bounds x="701" y="482" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-25" >
+        <dc:Bounds x="513" y="432" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-27" >
+        <dc:Bounds x="853" y="422" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-43" >
+        <dc:Bounds x="268" y="443" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-44" >
+        <dc:Bounds x="450" y="460" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-42" >
+        <dc:Bounds x="385" y="370" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-46" >
+        <dc:Bounds x="310" y="373" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-48" >
+        <dc:Bounds x="1056" y="315" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-49" >
+        <dc:Bounds x="666" y="393" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_1-_jbpm-unique-2" >
+        <di:waypoint x="39" y="71" />
+        <di:waypoint x="190" y="70" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-48-_jbpm-unique-7" >
+        <di:waypoint x="1080" y="339" />
+        <di:waypoint x="1202" y="335" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-3-_jbpm-unique-5" >
+        <di:waypoint x="322" y="74" />
+        <di:waypoint x="480" y="35" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-2-_jbpm-unique-3" >
+        <di:waypoint x="190" y="70" />
+        <di:waypoint x="322" y="74" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-31-_jbpm-unique-35" >
+        <di:waypoint x="333" y="305" />
+        <di:waypoint x="221" y="186" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-35-_jbpm-unique-32" >
+        <di:waypoint x="221" y="186" />
+        <di:waypoint x="141" y="312" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-32-_jbpm-unique-39" >
+        <di:waypoint x="141" y="312" />
+        <di:waypoint x="138" y="441" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-32-_jbpm-unique-31" >
+        <di:waypoint x="141" y="312" />
+        <di:waypoint x="333" y="305" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-19-_jbpm-unique-31" >
+        <di:waypoint x="689" y="262" />
+        <di:waypoint x="333" y="305" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-3-_jbpm-unique-6" >
+        <di:waypoint x="322" y="74" />
+        <di:waypoint x="477" y="109" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-15-_jbpm-unique-19" >
+        <di:waypoint x="802" y="78" />
+        <di:waypoint x="689" y="262" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-4-_jbpm-unique-15" >
+        <di:waypoint x="626" y="76" />
+        <di:waypoint x="802" y="78" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-15-_jbpm-unique-18" >
+        <di:waypoint x="802" y="78" />
+        <di:waypoint x="965" y="79" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-5-_jbpm-unique-4" >
+        <di:waypoint x="480" y="35" />
+        <di:waypoint x="626" y="76" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-6-_jbpm-unique-4" >
+        <di:waypoint x="477" y="109" />
+        <di:waypoint x="626" y="76" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-43-_jbpm-unique-22" >
+        <di:waypoint x="292" y="467" />
+        <di:waypoint x="372" y="498" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-25-_jbpm-unique-21" >
+        <di:waypoint x="537" y="456" />
+        <di:waypoint x="741" y="506" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-44-_jbpm-unique-25" >
+        <di:waypoint x="474" y="484" />
+        <di:waypoint x="537" y="456" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-21-_jbpm-unique-27" >
+        <di:waypoint x="741" y="506" />
+        <di:waypoint x="877" y="446" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-49-_jbpm-unique-27" >
+        <di:waypoint x="716" y="417" />
+        <di:waypoint x="877" y="446" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-39-_jbpm-unique-43" >
+        <di:waypoint x="138" y="441" />
+        <di:waypoint x="292" y="467" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-22-_jbpm-unique-44" >
+        <di:waypoint x="372" y="498" />
+        <di:waypoint x="474" y="484" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-42-_jbpm-unique-44" >
+        <di:waypoint x="425" y="394" />
+        <di:waypoint x="474" y="484" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-46-_jbpm-unique-42" >
+        <di:waypoint x="334" y="397" />
+        <di:waypoint x="425" y="394" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-43-_jbpm-unique-46" >
+        <di:waypoint x="292" y="467" />
+        <di:waypoint x="334" y="397" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-27-_jbpm-unique-48" >
+        <di:waypoint x="877" y="446" />
+        <di:waypoint x="1080" y="339" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-18-_jbpm-unique-48" >
+        <di:waypoint x="965" y="79" />
+        <di:waypoint x="1080" y="339" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-25-_jbpm-unique-49" >
+        <di:waypoint x="537" y="456" />
+        <di:waypoint x="716" y="417" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</definitions>
