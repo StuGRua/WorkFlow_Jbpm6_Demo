@@ -59,6 +59,7 @@ public class ProcessTest extends JbpmJUnitBaseTestCase {
 		HashMap<String, Object> results = new HashMap<String, Object>();
 		List<TaskSummary> tasks = taskService.getTasksAssignedAsPotentialOwner("mary", "en-UK");
 		TaskSummary task = tasks.get(0);
+		System.out.println(task);
 		System.out.println("'mary' completing task " + task.getName() + ": " + task.getDescription());
 		taskService.start(task.getId(), "mary");
 

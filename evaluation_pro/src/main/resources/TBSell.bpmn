@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<definitions id="Definition"
+             targetNamespace=""
+             typeLanguage="http://www.java.com/javaTypes"
+             expressionLanguage="http://www.mvel.org/2.0"
+             xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+             xmlns:g="http://www.jboss.org/drools/flow/gpd"
+             xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+             xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+             xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+             xmlns:tns="http://www.jboss.org/drools">
+
+  <itemDefinition id="_employeeItem" structureRef="String" />
+  <itemDefinition id="_reasonItem" structureRef="String" />
+  <itemDefinition id="_performanceItem" structureRef="String" />
+  <itemDefinition id="null" />
+
+  <process processType="Private" isExecutable="true" id="com.sample.TBSell" name="TBSell" tns:packageName="defaultPackage" tns:version="1" >
+
+    <!-- process variables -->
+    <property id="employee" itemSubjectRef="_employeeItem"/>
+    <property id="self_evalution" itemSubjectRef="_reasonItem"/>
+    <property id="HR_evalution" itemSubjectRef="_performanceItem"/>
+    <property id="PM_evalution" itemSubjectRef="null"/>
+    <property id="Pre" itemSubjectRef="null"/>
+    <property id="YN" itemSubjectRef="null"/>
+    <property id="user" itemSubjectRef="null"/>
+    <property id="state" itemSubjectRef="null"/>
+    <property id="OK" itemSubjectRef="null"/>
+
+    <!-- nodes -->
+    <startEvent id="_1" name=" "  isInterrupting="true"/>
+    <userTask id="_2" name="Fill Blanks" >
+      <extensionElements>
+        <tns:onEntry-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("Customer filling lists...");//kcontext.setVariable("Pre",kcontext.getProcessInstance.getVariable("Pre"));</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("Done.");
+System.out.println("---------------------");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_2_PreInput" name="Pre" />
+        <dataInput id="_2_self_evalutionInput" name="self_evalution" />
+        <dataInput id="_2_CommentInput" name="Comment" />
+        <dataInput id="_2_TaskNameInput" name="TaskName" />
+        <dataInput id="_2_NodeNameInput" name="NodeName" />
+        <dataInput id="_2_SkippableInput" name="Skippable" />
+        <dataOutput id="_2_PreOutput" name="Pre" />
+        <dataOutput id="_2_self_evalutionOutput" name="self_evalution" />
+        <inputSet>
+          <dataInputRefs>_2_PreInput</dataInputRefs>
+          <dataInputRefs>_2_self_evalutionInput</dataInputRefs>
+          <dataInputRefs>_2_CommentInput</dataInputRefs>
+          <dataInputRefs>_2_TaskNameInput</dataInputRefs>
+          <dataInputRefs>_2_NodeNameInput</dataInputRefs>
+          <dataInputRefs>_2_SkippableInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_2_PreOutput</dataOutputRefs>
+          <dataOutputRefs>_2_self_evalutionOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>Pre</sourceRef>
+        <targetRef>_2_PreInput</targetRef>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <sourceRef>self_evalution</sourceRef>
+        <targetRef>_2_self_evalutionInput</targetRef>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_2_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Please fill blanks which decides how to buy.</from>
+          <to xsi:type="tFormalExpression">_2_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_2_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Fill_Blanks</from>
+          <to xsi:type="tFormalExpression">_2_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_2_NodeNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Fill Blanks</from>
+          <to xsi:type="tFormalExpression">_2_NodeNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_2_SkippableInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">false</from>
+          <to xsi:type="tFormalExpression">_2_SkippableInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_2_PreOutput</sourceRef>
+        <targetRef>Pre</targetRef>
+      </dataOutputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_2_self_evalutionOutput</sourceRef>
+        <targetRef>self_evalution</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>#{user}</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <endEvent id="_7" name=" " >
+        <terminateEventDefinition />
+    </endEvent>
+    <exclusiveGateway id="_jbpm-unique-5" name="Gateway" gatewayDirection="Diverging" />
+    <scriptTask id="_jbpm-unique-6" name="Pre-Order" >
+      <script>System.out.println("Pre-Order");</script>
+    </scriptTask>
+    <scriptTask id="_jbpm-unique-7" name="Normal" >
+      <script>System.out.println("User is going to buy things normally...");</script>
+    </scriptTask>
+    <exclusiveGateway id="_jbpm-unique-8" name="Gateway" gatewayDirection="Converging" />
+    <userTask id="_jbpm-unique-9" name="ConfrimYN" >
+      <extensionElements>
+        <tns:onEntry-script>
+          <tns:script>kcontext.setVariable("YN",kcontext.getProcessInstance.getVariable("YN"));</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("Done.");
+System.out.println("---------------------");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-9_YNInput" name="YN" />
+        <dataInput id="_jbpm-unique-9_CommentInput" name="Comment" />
+        <dataInput id="_jbpm-unique-9_TaskNameInput" name="TaskName" />
+        <dataInput id="_jbpm-unique-9_NodeNameInput" name="NodeName" />
+        <dataOutput id="_jbpm-unique-9_YNOutput" name="YN" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-9_YNInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-9_CommentInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-9_TaskNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-9_NodeNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-9_YNOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>YN</sourceRef>
+        <targetRef>_jbpm-unique-9_YNInput</targetRef>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-9_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">ConfrimYN</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-9_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-9_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">ConfrimYN</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-9_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-9_NodeNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">ConfrimYN</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-9_NodeNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-9_YNOutput</sourceRef>
+        <targetRef>YN</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>#{user}</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <exclusiveGateway id="_jbpm-unique-10" name="Gateway" gatewayDirection="Diverging" />
+    <scriptTask id="_jbpm-unique-11" name="YES" >
+      <script>System.out.println(kcontext.getProcessInstance.getVariable("user")+" confirm to order goods.");
+System.out.println("----------------");</script>
+    </scriptTask>
+    <exclusiveGateway id="_jbpm-unique-1" name="Gateway" gatewayDirection="Converging" />
+    <scriptTask id="_jbpm-unique-2" name="Fail" >
+      <script>System.out.println("Failed.");
+System.out.println("---------------------");</script>
+    </scriptTask>
+    <userTask id="_jbpm-unique-16" name="PayToAli" >
+      <extensionElements>
+        <tns:onEntry-script>
+          <tns:script>System.out.println("-------------------");
+System.out.println("Paying...");</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script>
+          <tns:script>System.out.println("Ali received money: "+kcontext.getProcessInstance.getVariable("money"));</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-16_stateInput" name="state" />
+        <dataInput id="_jbpm-unique-16_CommentInput" name="Comment" />
+        <dataInput id="_jbpm-unique-16_TaskNameInput" name="TaskName" />
+        <dataInput id="_jbpm-unique-16_NodeNameInput" name="NodeName" />
+        <dataOutput id="_jbpm-unique-16_stateOutput" name="state" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-16_stateInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-16_CommentInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-16_TaskNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-16_NodeNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-16_stateOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>state</sourceRef>
+        <targetRef>_jbpm-unique-16_stateInput</targetRef>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-16_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">PayToAli</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-16_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-16_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">PayToAli</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-16_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-16_NodeNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">PayToAli</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-16_NodeNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-16_stateOutput</sourceRef>
+        <targetRef>state</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>mary</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <userTask id="_jbpm-unique-17" name="Send_Out" >
+      <extensionElements>
+        <tns:onEntry-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("-------------------");
+System.out.println("Sending...");</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script>
+          <tns:script>System.out.println("Finish sending.");
+System.out.println("-------------------");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-17_stateInput" name="state" />
+        <dataInput id="_jbpm-unique-17_CommentInput" name="Comment" />
+        <dataInput id="_jbpm-unique-17_TaskNameInput" name="TaskName" />
+        <dataInput id="_jbpm-unique-17_NodeNameInput" name="NodeName" />
+        <dataOutput id="_jbpm-unique-17_stateOutput" name="state" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-17_stateInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-17_CommentInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-17_TaskNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-17_NodeNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-17_stateOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>state</sourceRef>
+        <targetRef>_jbpm-unique-17_stateInput</targetRef>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-17_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Store is sending goods by express...</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-17_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-17_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Send_Out</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-17_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-17_NodeNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Send_Out</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-17_NodeNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-17_stateOutput</sourceRef>
+        <targetRef>state</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>john</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <userTask id="_jbpm-unique-18" name="Receive" >
+      <extensionElements>
+        <tns:onEntry-script scriptFormat="http://www.java.com/java">
+          <tns:script>System.out.println("******");
+kcontext.getProcessInstance().signalEvent("Confirmation",0);</tns:script>
+        </tns:onEntry-script>
+        <tns:onExit-script>
+          <tns:script>System.out.println("Received");
+System.out.println("******");</tns:script>
+        </tns:onExit-script>
+      </extensionElements>
+      <ioSpecification>
+        <dataInput id="_jbpm-unique-18_stateInput" name="state" />
+        <dataInput id="_jbpm-unique-18_CommentInput" name="Comment" />
+        <dataInput id="_jbpm-unique-18_TaskNameInput" name="TaskName" />
+        <dataInput id="_jbpm-unique-18_NodeNameInput" name="NodeName" />
+        <dataOutput id="_jbpm-unique-18_stateOutput" name="state" />
+        <inputSet>
+          <dataInputRefs>_jbpm-unique-18_stateInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-18_CommentInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-18_TaskNameInput</dataInputRefs>
+          <dataInputRefs>_jbpm-unique-18_NodeNameInput</dataInputRefs>
+        </inputSet>
+        <outputSet>
+          <dataOutputRefs>_jbpm-unique-18_stateOutput</dataOutputRefs>
+        </outputSet>
+      </ioSpecification>
+      <dataInputAssociation>
+        <sourceRef>state</sourceRef>
+        <targetRef>_jbpm-unique-18_stateInput</targetRef>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-18_CommentInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Receive</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-18_CommentInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-18_TaskNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Receive</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-18_TaskNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataInputAssociation>
+        <targetRef>_jbpm-unique-18_NodeNameInput</targetRef>
+        <assignment>
+          <from xsi:type="tFormalExpression">Receive</from>
+          <to xsi:type="tFormalExpression">_jbpm-unique-18_NodeNameInput</to>
+        </assignment>
+      </dataInputAssociation>
+      <dataOutputAssociation>
+        <sourceRef>_jbpm-unique-18_stateOutput</sourceRef>
+        <targetRef>state</targetRef>
+      </dataOutputAssociation>
+      <potentialOwner>
+        <resourceAssignmentExpression>
+          <formalExpression>#{user}</formalExpression>
+        </resourceAssignmentExpression>
+      </potentialOwner>
+    </userTask>
+    <parallelGateway id="_jbpm-unique-19" name="Gateway" gatewayDirection="Diverging" />
+    <parallelGateway id="_jbpm-unique-20" name="Gateway" gatewayDirection="Converging" />
+    <scriptTask id="_jbpm-unique-21" name="Succ" >
+      <script>System.out.println("Store received money: "+kcontext.getProcessInstance.getVariable("money"));
+System.out.println("Purchase successfully!");</script>
+    </scriptTask>
+    <scriptTask id="_jbpm-unique-22" name="Received Checked" >
+      <script>System.out.println("-----");
+System.out.println("Received checked, user received goods successfully. Push to next step...");
+System.out.println("-----");</script>
+    </scriptTask>
+    <intermediateCatchEvent id="_jbpm-unique-23" name="Signal" >
+      <dataOutput id="_jbpm-unique-23_Output" name="event" />
+      <dataOutputAssociation>
+      <sourceRef>_jbpm-unique-23_Output</sourceRef>
+      <targetRef>OK</targetRef>
+      </dataOutputAssociation>
+      <outputSet>
+        <dataOutputRefs>_jbpm-unique-23_Output</dataOutputRefs>
+      </outputSet>
+      <signalEventDefinition signalRef="Confirmation"/>
+    </intermediateCatchEvent>
+    <intermediateCatchEvent id="_jbpm-unique-24" name="Timer" >
+      <timerEventDefinition>
+        <timeDuration xsi:type="tFormalExpression">2s</timeDuration>
+      </timerEventDefinition>
+    </intermediateCatchEvent>
+
+    <!-- connections -->
+    <sequenceFlow id="_1-_2" sourceRef="_1" targetRef="_2" />
+    <sequenceFlow id="_jbpm-unique-1-_7" sourceRef="_jbpm-unique-1" targetRef="_7" />
+    <sequenceFlow id="_2-_jbpm-unique-5" sourceRef="_2" targetRef="_jbpm-unique-5" />
+    <sequenceFlow id="_jbpm-unique-5-_jbpm-unique-6" sourceRef="_jbpm-unique-5" targetRef="_jbpm-unique-6" name="Pre" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >if((Integer)Pre==1) return true;
+else return false;</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-5-_jbpm-unique-7" sourceRef="_jbpm-unique-5" targetRef="_jbpm-unique-7" name="Nor" tns:priority="2" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >if((Integer)Pre!=1) return true;
+else return false;</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-7-_jbpm-unique-8" sourceRef="_jbpm-unique-7" targetRef="_jbpm-unique-8" />
+    <sequenceFlow id="_jbpm-unique-11-_jbpm-unique-8" sourceRef="_jbpm-unique-11" targetRef="_jbpm-unique-8" />
+    <sequenceFlow id="_jbpm-unique-6-_jbpm-unique-9" sourceRef="_jbpm-unique-6" targetRef="_jbpm-unique-9" />
+    <sequenceFlow id="_jbpm-unique-9-_jbpm-unique-10" sourceRef="_jbpm-unique-9" targetRef="_jbpm-unique-10" />
+    <sequenceFlow id="_jbpm-unique-10-_jbpm-unique-11" sourceRef="_jbpm-unique-10" targetRef="_jbpm-unique-11" name="Yes" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return (Integer)YN==1;</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-2-_jbpm-unique-1" sourceRef="_jbpm-unique-2" targetRef="_jbpm-unique-1" />
+    <sequenceFlow id="_jbpm-unique-21-_jbpm-unique-1" sourceRef="_jbpm-unique-21" targetRef="_jbpm-unique-1" />
+    <sequenceFlow id="_jbpm-unique-10-_jbpm-unique-2" sourceRef="_jbpm-unique-10" targetRef="_jbpm-unique-2" name="No" tns:priority="1" >
+      <conditionExpression xsi:type="tFormalExpression" language="http://www.java.com/java" >return (Integer)YN!=1;</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_jbpm-unique-8-_jbpm-unique-16" sourceRef="_jbpm-unique-8" targetRef="_jbpm-unique-16" />
+    <sequenceFlow id="_jbpm-unique-19-_jbpm-unique-17" sourceRef="_jbpm-unique-19" targetRef="_jbpm-unique-17" />
+    <sequenceFlow id="_jbpm-unique-19-_jbpm-unique-18" sourceRef="_jbpm-unique-19" targetRef="_jbpm-unique-18" />
+    <sequenceFlow id="_jbpm-unique-16-_jbpm-unique-19" sourceRef="_jbpm-unique-16" targetRef="_jbpm-unique-19" />
+    <sequenceFlow id="_jbpm-unique-18-_jbpm-unique-20" sourceRef="_jbpm-unique-18" targetRef="_jbpm-unique-20" />
+    <sequenceFlow id="_jbpm-unique-23-_jbpm-unique-20" sourceRef="_jbpm-unique-23" targetRef="_jbpm-unique-20" />
+    <sequenceFlow id="_jbpm-unique-22-_jbpm-unique-21" sourceRef="_jbpm-unique-22" targetRef="_jbpm-unique-21" />
+    <sequenceFlow id="_jbpm-unique-20-_jbpm-unique-22" sourceRef="_jbpm-unique-20" targetRef="_jbpm-unique-22" />
+    <sequenceFlow id="_jbpm-unique-24-_jbpm-unique-23" sourceRef="_jbpm-unique-24" targetRef="_jbpm-unique-23" />
+    <sequenceFlow id="_jbpm-unique-17-_jbpm-unique-24" sourceRef="_jbpm-unique-17" targetRef="_jbpm-unique-24" />
+
+  </process>
+
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="com.sample.TBSell" >
+      <bpmndi:BPMNShape bpmnElement="_1" >
+        <dc:Bounds x="87" y="172" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_2" >
+        <dc:Bounds x="62" y="22" width="135" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_7" >
+        <dc:Bounds x="48" y="518" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-5" >
+        <dc:Bounds x="261" y="33" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-6" >
+        <dc:Bounds x="249" y="101" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-7" >
+        <dc:Bounds x="400" y="22" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-8" >
+        <dc:Bounds x="759" y="54" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-9" >
+        <dc:Bounds x="246" y="171" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-10" >
+        <dc:Bounds x="408" y="238" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-11" >
+        <dc:Bounds x="408" y="85" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-1" >
+        <dc:Bounds x="48" y="317" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-2" >
+        <dc:Bounds x="31" y="242" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-16" >
+        <dc:Bounds x="739" y="199" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-17" >
+        <dc:Bounds x="599" y="319" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-18" >
+        <dc:Bounds x="570" y="450" width="100" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-19" >
+        <dc:Bounds x="768" y="333" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-20" >
+        <dc:Bounds x="280" y="501" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-21" >
+        <dc:Bounds x="264" y="315" width="80" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-22" >
+        <dc:Bounds x="240" y="415" width="136" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-23" >
+        <dc:Bounds x="415" y="409" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_jbpm-unique-24" >
+        <dc:Bounds x="500" y="352" width="48" height="48" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_1-_2" >
+        <di:waypoint x="111" y="196" />
+        <di:waypoint x="129" y="46" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-1-_7" >
+        <di:waypoint x="72" y="341" />
+        <di:waypoint x="72" y="542" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_2-_jbpm-unique-5" >
+        <di:waypoint x="129" y="46" />
+        <di:waypoint x="285" y="57" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-5-_jbpm-unique-6" >
+        <di:waypoint x="285" y="57" />
+        <di:waypoint x="289" y="125" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-5-_jbpm-unique-7" >
+        <di:waypoint x="285" y="57" />
+        <di:waypoint x="440" y="46" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-7-_jbpm-unique-8" >
+        <di:waypoint x="440" y="46" />
+        <di:waypoint x="783" y="78" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-11-_jbpm-unique-8" >
+        <di:waypoint x="448" y="109" />
+        <di:waypoint x="783" y="78" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-6-_jbpm-unique-9" >
+        <di:waypoint x="289" y="125" />
+        <di:waypoint x="296" y="195" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-9-_jbpm-unique-10" >
+        <di:waypoint x="296" y="195" />
+        <di:waypoint x="432" y="262" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-10-_jbpm-unique-11" >
+        <di:waypoint x="432" y="262" />
+        <di:waypoint x="448" y="109" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-2-_jbpm-unique-1" >
+        <di:waypoint x="71" y="266" />
+        <di:waypoint x="72" y="341" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-21-_jbpm-unique-1" >
+        <di:waypoint x="304" y="339" />
+        <di:waypoint x="72" y="341" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-10-_jbpm-unique-2" >
+        <di:waypoint x="432" y="262" />
+        <di:waypoint x="71" y="266" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-8-_jbpm-unique-16" >
+        <di:waypoint x="783" y="78" />
+        <di:waypoint x="789" y="223" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-19-_jbpm-unique-17" >
+        <di:waypoint x="792" y="357" />
+        <di:waypoint x="649" y="343" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-19-_jbpm-unique-18" >
+        <di:waypoint x="792" y="357" />
+        <di:waypoint x="620" y="474" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-16-_jbpm-unique-19" >
+        <di:waypoint x="789" y="223" />
+        <di:waypoint x="792" y="357" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-18-_jbpm-unique-20" >
+        <di:waypoint x="620" y="474" />
+        <di:waypoint x="304" y="525" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-23-_jbpm-unique-20" >
+        <di:waypoint x="439" y="433" />
+        <di:waypoint x="304" y="525" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-22-_jbpm-unique-21" >
+        <di:waypoint x="308" y="439" />
+        <di:waypoint x="304" y="339" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-20-_jbpm-unique-22" >
+        <di:waypoint x="304" y="525" />
+        <di:waypoint x="308" y="439" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-24-_jbpm-unique-23" >
+        <di:waypoint x="524" y="376" />
+        <di:waypoint x="439" y="433" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_jbpm-unique-17-_jbpm-unique-24" >
+        <di:waypoint x="649" y="343" />
+        <di:waypoint x="524" y="376" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</definitions>
